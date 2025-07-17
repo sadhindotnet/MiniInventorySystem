@@ -22,7 +22,14 @@ namespace MiniInventorySystem.Controllers
 
         public IActionResult Index()
         {
-            var categories = _categoryRepository.GetAllCategories();
+            //var categories = _categoryRepository.GetAllCategories();
+            var categories = new List<Category>
+    {
+        new Category { CategoryId = 1, CategoryName = "Stationery" },
+        new Category { CategoryId = 2, CategoryName = "Electronics" },
+        new Category { CategoryId = 3, CategoryName = "Grocery" },
+        new Category { CategoryId = 4, CategoryName = "Sports" }
+    };
             return View(categories);
         }
 

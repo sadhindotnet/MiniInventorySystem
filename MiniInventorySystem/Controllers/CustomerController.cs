@@ -15,7 +15,14 @@ namespace MiniInventorySystem.Controllers
 
         public IActionResult Index()
         {
-            var customers = _customerRepo.GetAllCustomers();
+            //var customers = _customerRepo.GetAllCustomers();
+            var customers = new List<Customer>
+    {
+        new Customer { CustomerId = 1, CustomerName = "Abdullah", Address = "Dhaka", ContactNo = "01700000001" },
+        new Customer { CustomerId = 2, CustomerName = "Rafi", Address = "Chattogram", ContactNo = "01700000002" },
+        new Customer { CustomerId = 3, CustomerName = "Sumi", Address = "Khulna", ContactNo = "01700000003" },
+        new Customer { CustomerId = 4, CustomerName = "Jamal", Address = "Rajshahi", ContactNo = "01700000004" }
+    };
             return View(customers);
         }
 
