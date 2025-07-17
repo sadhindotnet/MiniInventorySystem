@@ -2,10 +2,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# নিচের path এ .csproj ফাইলটা আছে বলে ধরে নিচ্ছি
-COPY ["EmbroideryWorkerManagement/EmbroideryWorkerManagement.csproj", "EmbroideryWorkerManagement/"]
+# নিচের path এ .csproj ফাইলটা আছে ধরে নিচ্ছি
+COPY ["MiniInventorySystem/MiniInventorySystem.csproj", "MiniInventorySystem/"]
 
-WORKDIR /src/EmbroideryWorkerManagement
+WORKDIR /src/MiniInventorySystem
 RUN dotnet restore
 
 COPY . .
@@ -19,4 +19,4 @@ COPY --from=build /app/publish .
 
 EXPOSE 80
 
-ENTRYPOINT ["dotnet", "EmbroideryWorkerManagement.dll"]
+ENTRYPOINT ["dotnet", "MiniInventorySystem.dll"]
