@@ -1,0 +1,238 @@
+﻿@model List<MiniInventorySystem.Models.Product>
+
+@{
+    ViewData["Title"] = "Product Inventory";
+}
+
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-4">
+    <h2>Mini Inventory Management</h2>
+
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">
+        + Add New Product
+    </button>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Category Name</th>
+                <th style="width: 150px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.ProductName</td>
+                    <td>@p.Quantity</td>
+                    <td>@p.UnitPrice.ToString("C")</td>
+                    <td>@p.CategoryName</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-1"
+                                data-bs-toggle="modal" data-bs-target="#editModal"
+                                data-id="@p.ProductId"
+                                data-name="@p.ProductName"
+                                data-qty="@p.Quantity"
+                                data-price="@p.UnitPrice"
+                                data-categoryid="@p.CategoryName">
+                            Edit
+                        </button>
+                        <button class="btn btn-sm btn-danger"
+                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                data-id="@p.ProductId"
+                                data-name="@p.ProductName">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" asp-action="Create">
+            @Html.AntiForgeryToken()
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Add New Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="ProductName" class="form-label">Product Name</label>
+                        <input type="text" name="ProductName" id="ProductName" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="AddCategoryDropdown" class="form-label">Category</label>
+                        <select name="CategoryId" id="AddCategoryDropdown" class="form-select" required>
+                            <option value="">-- Select Category --</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Quantity" class="form-label">Quantity</label>
+                        <input type="number" name="Quantity" id="Quantity" class="form-control" min="0" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="UnitPrice" class="form-label">Unit Price</label>
+                        <input type="number" step="0.01" name="UnitPrice" id="UnitPrice" class="form-control" min="0" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Product</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" asp-action="Edit">
+            @Html.AntiForgeryToken()
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="ProductId" id="editProductId" />
+                    <div class="mb-3">
+                        <label for="editProductName" class="form-label">Product Name</label>
+                        <input type="text" name="ProductName" id="editProductName" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCategoryDropdown" class="form-label">Category</label>
+                        <select name="CategoryId" id="editCategoryDropdown" class="form-select" required>
+                            <option value="">-- Select Category --</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editQuantity" class="form-label">Quantity</label>
+                        <input type="number" name="Quantity" id="editQuantity" class="form-control" min="0" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editUnitPrice" class="form-label">Unit Price</label>
+                        <input type="number" step="0.01" name="UnitPrice" id="editUnitPrice" class="form-control" min="0" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-warning">Update Product</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" asp-action="Delete">
+            @Html.AntiForgeryToken()
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="ProductId" id="deleteProductId" />
+                    <p>Are you sure you want to delete <strong id="deleteProductName"></strong>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+    <script>
+       $(document).ready(function () {
+
+           // Load categories for Add modal dropdown
+           function loadCategoriesForAdd() {
+               $.ajax({
+                   url: '/api/categoryapi',
+                   method: 'GET',
+                   success: function (data) {
+                       var dropdown = $('#AddCategoryDropdown');
+                       dropdown.empty().append('<option value="">-- Select Category --</option>');
+                       $.each(data, function (i, cat) {
+                           dropdown.append('<option value="' + cat.categoryId + '">' + cat.categoryName + '</option>');
+                       });
+                   },
+                   error: function (err) {
+                       console.log(err);
+                   }
+               });
+           }
+
+           // Load categories for Edit modal dropdown
+           function loadCategoriesForEdit(selectedCategoryId) {
+               return $.ajax({
+                   url: '/api/categoryapi',
+                   method: 'GET',
+                   success: function (data) {
+                       var dropdown = $('#editCategoryDropdown');
+                       dropdown.empty().append('<option value="">-- Select Category --</option>');
+                       $.each(data, function (i, cat) {
+                           dropdown.append('<option value="' + cat.categoryId + '">' + cat.categoryName + '</option>');
+                       });
+                       dropdown.val(selectedCategoryId);
+                   },
+                   error: function (err) {
+                       console.log(err);
+                   }
+               });
+           }
+
+           // When Add modal opens
+           $('#addModal').on('show.bs.modal', function () {
+               loadCategoriesForAdd();
+           });
+
+           // When Edit modal opens
+           $('#editModal').on('show.bs.modal', function (event) {
+               var button = $(event.relatedTarget);
+               var id = button.data('id');
+               var name = button.data('name');
+               var qty = button.data('qty');
+               var price = button.data('price');
+               var categoryId = button.data('categoryid');
+
+               $('#editProductId').val(id);
+               $('#editProductName').val(name);
+               $('#editQuantity').val(qty);
+               $('#editUnitPrice').val(price);
+
+               loadCategoriesForEdit(categoryId);
+           });
+
+           // When Delete modal opens
+           $('#deleteModal').on('show.bs.modal', function (event) {
+               var button = $(event.relatedTarget);
+               var id = button.data('id');
+               var name = button.data('name');
+
+               $('#deleteProductId').val(id);
+               $('#deleteProductName').text(name);
+           });
+
+       });
+</script>
+

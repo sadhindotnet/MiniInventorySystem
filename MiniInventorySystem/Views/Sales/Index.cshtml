@@ -1,0 +1,166 @@
+﻿@model MiniInventorySystem.Models.SalesPageViewModel
+
+@{
+    var products = Model.Products;
+}
+
+<h2>Sales</h2>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="Sale.SaleId" />
+
+    <div class="mb-3">
+        <label asp-for="Sale.CustomerId" class="form-label"></label>
+        <input asp-for="Sale.CustomerId" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Sale.SaleDate" class="form-label"></label>
+        <input asp-for="Sale.SaleDate" class="form-control" type="date" />
+    </div>
+
+    <table class="table" id="detailsTable">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>
+                    <button type="button" id="addRow" class="btn btn-success btn-sm">Add</button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Sale.Details?.Any() == true)
+            {
+                for (int i = 0; i < Model.Sale.Details.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <select name="Details[0].ProductId" class="form-select">
+                                <option value="">-- Select --</option>
+                                @foreach (var p in products)
+                                {
+                                    <option value="@p.Value">@p.Text</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <input asp-for="Sale.Details[@i].Quantity" class="form-control" min="1" />
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm removeRow">Remove</button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        <select name="Sale.Details[0].ProductId" class="form-select">
+                            <option value="">-- Select --</option>
+                            @foreach (var p in products)
+                            {
+                                <option value="@p.Value">@p.Text</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <input name="Sale.Details[0].Quantity" class="form-control" type="number" min="1" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm removeRow">Remove</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+<hr />
+
+<h3>Sales List</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>SaleId</th>
+            <th>CustomerId</th>
+            <th>SaleDate</th>
+            <th>TotalAmount</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sale in Model.Sales)
+        {
+            <tr>
+                <td>@sale.SaleId</td>
+                <td>@sale.CustomerId</td>
+                <td>@sale.SaleDate.ToShortDateString()</td>
+                <td>@sale.TotalAmount</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@sale.SaleId" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@sale.SaleId" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        var productsHtml = `
+            <option value="">-- Select --</option>
+        @foreach (var p in products)
+        {
+            <text><option value="@p.Value">@p.Text</option></text>
+        }
+        `;
+
+        document.getElementById("addRow").addEventListener("click", function () {
+            var tableBody = document.querySelector("#detailsTable tbody");
+            var rowCount = tableBody.rows.length;
+
+            var newRow = document.createElement("tr");
+
+            newRow.innerHTML = `
+                <td>
+                    <select name="Sale.Details[${rowCount}].ProductId" class="form-select">
+                        ${productsHtml}
+                    </select>
+                </td>
+                <td>
+                    <input type="number" name="Sale.Details[${rowCount}].Quantity" class="form-control" min="1" />
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm removeRow">Remove</button>
+                </td>
+            `;
+
+            tableBody.appendChild(newRow);
+            wireRemoveButtons();
+        });
+
+        function wireRemoveButtons() {
+            document.querySelectorAll(".removeRow").forEach(btn => {
+                btn.onclick = function () {
+                    btn.closest("tr").remove();
+                    updateIndexes();
+                }
+            });
+        }
+
+        wireRemoveButtons();
+
+        function updateIndexes() {
+            var rows = document.querySelectorAll("#detailsTable tbody tr");
+            rows.forEach((row, index) => {
+                row.querySelector("select").name = `Sale.Details[${index}].ProductId`;
+                row.querySelector("input").name = `Sale.Details[${index}].Quantity`;
+            });
+        }
+    </script>
+}

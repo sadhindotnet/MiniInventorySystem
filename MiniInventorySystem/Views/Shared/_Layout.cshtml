@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>MiniInventorySystem</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- W3.CSS (optional, but may conflict with Bootstrap) -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" />
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .w3-sidebar {
+            width: 250px;
+        }
+
+        #openSidebar {
+            display: block;
+            margin-top: 8px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            transition: margin-left 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="w3-container w3-teal">
+        <button id="openSidebar" class="w3-button w3-teal w3-large">
+            ☰ Menu  <span>MiniInventorySystem</span>
+        </button>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="mainSidebar" class="w3-sidebar w3-bar-block w3-light-grey">
+        <h3 class="w3-bar-item">Admin Menu</h3>
+        <a href="/#" class="w3-bar-item w3-button">Dashboard</a>
+        <a href="/Product/Index" class="w3-bar-item w3-button">Products</a>
+        <a href="/Category/index" class="w3-bar-item w3-button">Categories</a>
+        <a href="/Customer/Index" class="w3-bar-item w3-button">Customer</a>
+        <a href="/Sales/Index" class="w3-bar-item w3-button">Sales Order</a>
+    </div>
+
+    <div class="main-content">
+        <div class="container py-4">
+            @RenderBody()
+        </div>
+    </div>
+
+    <script>
+        let sidebarVisible = true;
+
+        document.getElementById("openSidebar").onclick = function () {
+            var sidebar = document.getElementById("mainSidebar");
+            var mainContent = document.querySelector(".main-content");
+
+            if (sidebarVisible) {
+                sidebar.style.display = "none";
+                mainContent.style.marginLeft = "0";
+                sidebarVisible = false;
+            } else {
+                sidebar.style.display = "block";
+                mainContent.style.marginLeft = "250px";
+                sidebarVisible = true;
+            }
+        };
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
