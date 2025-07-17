@@ -1,0 +1,42 @@
+[
+  {
+    "ProductId": 1,
+    "ProductName": "Product",
+    "Quantity": 1,
+    "UnitPrice": 10.00,
+    "CategoryId": 2,
+    "CategoryName": "IT"
+  },
+  {
+    "ProductId": 2,
+    "ProductName": "dwd",
+    "Quantity": 100,
+    "UnitPrice": 20.00,
+    "CategoryId": 3,
+    "CategoryName": "Food"
+  },
+  {
+    "ProductId": 3,
+    "ProductName": "pencil",
+    "Quantity": 3,
+    "UnitPrice": 2.00,
+    "CategoryId": 1,
+    "CategoryName": "Satationary"
+  },
+  {
+    "ProductId": 4,
+    "ProductName": "mobile",
+    "Quantity": 1,
+    "UnitPrice": 10000.00,
+    "CategoryId": 3,
+    "CategoryName": "Meet"
+  },
+  {
+    "ProductId": 5,
+    "ProductName": "bat",
+    "Quantity": 2,
+    "UnitPrice": 10.00,
+    "CategoryId": 4,
+    "CategoryName": "Education"
+  }
+]
