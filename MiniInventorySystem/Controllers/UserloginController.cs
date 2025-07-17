@@ -12,6 +12,7 @@ namespace MiniInventorySystem.Controllers
             return View();
         }
 
+
         
         [HttpPost]
         public IActionResult Login(Login model)
