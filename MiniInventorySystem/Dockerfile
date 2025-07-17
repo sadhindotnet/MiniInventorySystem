@@ -3,7 +3,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-VOLUME ["/app/keys"]
+#VOLUME ["/app/keys"]
 # নিচের path এ .csproj ফাইলটা আছে বলে ধরে নিচ্ছি
 COPY ["MiniInventorySystem/MiniInventorySystem.csproj", "MiniInventorySystem/"]
 
