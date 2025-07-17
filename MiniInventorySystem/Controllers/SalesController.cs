@@ -16,26 +16,77 @@ namespace MiniInventorySystem.Controllers
             _productRepo = productRepo;
         }
 
-        // List sales & form
         public IActionResult Index()
         {
-            var sales = _saleRepo.GetAllSales();
-            var products = _productRepo.GetAll()
-                .Select(p => new SelectListItem
-                {
-                    Value = p.ProductId.ToString(),
-                    Text = p.ProductName
-                }).ToList();
+            // Local product list (dropdown)
+            var products = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "1", Text = "Pen" },
+        new SelectListItem { Value = "2", Text = "Notebook" },
+        new SelectListItem { Value = "3", Text = "Mouse" }
+    };
 
+            // Local sales data with details
+            var sales = new List<Sale>
+    {
+        new Sale
+        {
+            SaleId = 1,
+            CustomerId = 101,
+            CustomerName = "Abdullah",
+            SaleDate = DateTime.Today.AddDays(-2),
+            TotalAmount = 40,
+            Details = new List<SaleDetail>
+            {
+                new SaleDetail { ProductId = 1, ProductName = "Pen", Quantity = 2, },
+                new SaleDetail { ProductId = 2, ProductName = "Notebook", Quantity = 1, }
+            }
+        },
+        new Sale
+        {
+            SaleId = 2,
+            CustomerId = 102,
+            CustomerName = "Rafi",
+            SaleDate = DateTime.Today.AddDays(-1),
+            TotalAmount = 100,
+            Details = new List<SaleDetail>
+            {
+                new SaleDetail { ProductId = 3, ProductName = "Mouse", Quantity = 1 }
+            }
+        }
+    };
+
+            // ViewModel bind
             var viewModel = new SalesPageViewModel
             {
-                Sale = new Sale(),
+                Sale = new Sale(), // form er jonno blank
                 Sales = sales,
                 Products = products
             };
 
             return View(viewModel);
         }
+
+        // List sales & form
+        //public IActionResult Index()
+        //{
+        //    var sales = _saleRepo.GetAllSales();
+        //    var products = _productRepo.GetAll()
+        //        .Select(p => new SelectListItem
+        //        {
+        //            Value = p.ProductId.ToString(),
+        //            Text = p.ProductName
+        //        }).ToList();
+
+        //    var viewModel = new SalesPageViewModel
+        //    {
+        //        Sale = new Sale(),
+        //        Sales = sales,
+        //        Products = products
+        //    };
+
+        //    return View(viewModel);
+        //}
 
         // Show create form - optional if using Index for form
         public IActionResult Create()
